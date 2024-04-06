@@ -27,7 +27,7 @@ jobs:
           # Options
           user: louischarnay
           template: classic
-          base: header, metadata, activity, community, repositories
+          base: header, community, metadata, activity
           config_display: large
           config_timezone: Europe/Paris
           plugin_achievements: yes
