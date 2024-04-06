@@ -1,0 +1,38 @@
+name: Update READMEs
+
+on:
+  push:
+    branches:
+      - main
+      - master
+
+jobs:
+  update_readmes:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v2
+
+    - name: Clone all repositories
+      run: |
+        token=$METRICS_TOKEN
+        repos=$(curl -s -H "Authorization: token $token" https://api.github.com/user/repos?per_page=100 | jq -r '.[].clone_url')
+        for repo in $repos; do
+          git clone $repo
+        done
+
+    - name: Append title to READMEs
+      run: |
+        for repo in */; do
+          cd $repo
+          if [ -f README.md ]; then
+            echo "# Title" > temp_file
+            cat README.md >> temp_file
+            mv temp_file README.md
+            git add README.md
+            git commit -m "Add title to README"
+            git push origin HEAD:main
+          fi
+          cd ..
+        done
