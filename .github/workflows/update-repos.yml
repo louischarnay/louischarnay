@@ -16,7 +16,7 @@ jobs:
 
     - name: Clone all repositories
       run: |
-        token=$METRICS_TOKEN
+        token=$METRICS_TOKEN  # Replace $ACCESS_TOKEN with your personal access token
         repos=$(curl -s -H "Authorization: token $token" https://api.github.com/user/repos?per_page=100 | jq -r '.[].clone_url')
         for repo in $repos; do
           git clone $repo
